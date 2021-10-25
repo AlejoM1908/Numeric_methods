@@ -14,6 +14,11 @@ function bolzano_bisection()
             elseif opposite_signs(func(a), func(b))
                 % Start iterating to get the solution
                 get_value(a,b,func)
+                decision= get_exit();
+
+                if decision
+                    break
+                end
             else
                 throw(MException('MATLAB:Bisection',...
                     'Los limites evaluados no tienen signos diferentes'))
@@ -21,7 +26,7 @@ function bolzano_bisection()
         catch excep
             % Display error message
             clear_console()
-            
+
             if strcmp(excep.identifier, 'MATLAB:Bisection')
                 disp(excep.message)
             else
@@ -90,6 +95,17 @@ function value= get_iterator()
     else
         % Return the default value
         value= 10;
+    end
+end
+
+% The function get_exit is used to close the program execution
+function value= get_exit()
+    option= input('La ejecución finalizo correctamente, desea salir? (y/n): ', 's');
+
+    if strcmp(option, "y")
+        value= 1;
+    else
+        value= 0;
     end
 end
 
