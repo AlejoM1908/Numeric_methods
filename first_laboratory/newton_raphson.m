@@ -64,14 +64,14 @@ cont=1;
             end
             %We plot the function and mark the solution point
             x=-2*p0:0.5:2*p0;
-            [a,tam]= size(x);
+            [~,tam]= size(x);
             y=  zeros(1,tam);
             for i=1: tam
                 y(1,i)= subs(s,x(1,i));
             end
             
             plot(x,y,'.k',res,0,'o');title 'Newton Raphson Method';xlabel 'Time'; ylabel 'Height'; 
-       catch excep
+        catch excep
             %Display error message
             clc
             
