@@ -11,6 +11,8 @@ function newton_raphson()
             eval_f = subs(s,p0);
             eval_df= subs(der_fun, p0);
             c=0;
+            tags= ['lower limit | ','upper limit | ','iterations | ','median | ','result'];
+            display(tags)
 
             while abs(eval_f)>t
                 res= (p0 - (eval_f/eval_df));
@@ -18,8 +20,9 @@ function newton_raphson()
                 eval_df=subs(der_fun,res);
                 p0=res;
                 c=c+1;
+                disp(tags)
             end
-            double(res)
+            %double(res)
             
             
 
