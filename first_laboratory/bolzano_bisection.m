@@ -138,7 +138,7 @@ function value= bisection(a,b,func,iterator)
         return
     end
     
-    disp([a,b,iterator,c,func(c)])
+    fprintf('%f    %f    %f    %f    %f\n',a,b,iterator,c,func(c))
     % Check between interval [a,c] and [c,b]
     if opposite_signs(func(a),func(c))
         value= bisection(a,c,func,iterator-1);
