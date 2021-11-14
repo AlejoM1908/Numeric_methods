@@ -10,12 +10,9 @@ function triangular_factorization()
             % Getting the lower and upper triangle matrices from A
             [L,U]= process_matrix(A, matrix_size);
 
-            disp(L)
-            disp(U)
-
-            % Solve the system
-            response= solve_system(U,b,matrix_size);
-            disp(A*response)
+            % Solve the system and print results
+            [x,y]= solve_system(L,U,b,matrix_size);
+            pretty_print(A,b,U,L,x,y)
 
             % Exit program
             decision= get_exit();
@@ -37,22 +34,59 @@ function triangular_factorization()
     end
 end
 
-% The function clear_console is usde to clear the console
+% The function clear_console is used to clear the console
 function clear_console()
     clc
 end
 
+% The function pretty_print is used to print the results of the triangular factorization algorithm
+% Param matrix is the original matrix
+% Param b is the values vector
+% Param upper is the upper triangular matrix
+% lower is the lower triangular matrix
+% x is the solution vector
+% y is the backward substitution vector
+function pretty_print(matrix, b, upper, lower, x, y)
+    clear_console()
 
-function value= solve_system(Upper, b, size)
-    % Back substitution :
-    x = zeros(size, 1);
-    AM = [Upper b];
-    x(size) = AM(size, size+1) / AM(size, size);
-    for i = size - 1: - 1:1
-        x(i) = (AM(i, size+1) - AM(i, i + 1:size) * x(i + 1:size)) / AM(i, i);
+    % Print original variables
+    disp('Matriz aumentada')
+    disp([matrix b])
+
+    % Print the LU matrices
+    disp('Matriz triangular superior')
+    disp(upper)
+    disp('Matriz triangular inferior')
+    disp(lower)
+    disp('Matriz original multiplicando L y U')
+    disp(lower*upper)
+
+    % Print linear system solution
+    disp('Vector y de Ly=b (sustitución hacia adelante)')
+    disp(y)
+    disp('Vector x de Ux=b (sustitución hacia atrás) y solución al sistema')
+    disp(x)
+end
+
+% The function solve_system is used to solve the system having the LU descomposition
+% @Param Upper is the upper triangular matrix
+% @Param b is the values vector
+% @Param size is the matrix size
+% Return the solution vectors x and y
+function [x,y]= solve_system(lower, upper, b, size)
+    % Forward Substitution
+    y= zeros(size, 1);
+    y(1)= b(1)/lower(1,1);
+    for i= 2:size
+        y(i)= (b(i) - lower(i,1:i-1) * y(1:i-1)) / lower(size,size);
     end
 
-    value= x;
+    % Backward Substitution
+    x= zeros(size, 1);
+    x(size)= y(size) / upper(size, size);
+    for i = size - 1:-1:1
+        x(i)= (y(i) - upper(i, i+1:size) * x(i+1:size)) / upper(i, i);
+    end
 end
 
 % The function process_matrix is used to generate the lower and upper triangular matrices from
