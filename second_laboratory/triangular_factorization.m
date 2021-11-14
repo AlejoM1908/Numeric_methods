@@ -4,16 +4,19 @@ function triangular_factorization()
         try
             % Request user data
             matrix_size= request_matrix_size();
-            variables= request_variables(matrix_size);
-            equations= request_equations(matrix_size);
-
-            % Getting the value matrix from the equations
-            [A,~]= get_values_matrix(equations, variables);
+            A= request_matrix(matrix_size);
+            b= request_values(matrix_size);
 
             % Getting the lower and upper triangle matrices from A
-            [L,U]= process_matrix(A);
+            [L,U]= process_matrix(A, matrix_size);
 
-            disp(L,U)
+            disp(L)
+            disp(U)
+
+            % Solve the system
+            response= solve_system(U,b,matrix_size);
+            disp(A*response)
+
             % Exit program
             decision= get_exit();
             if decision
@@ -39,47 +42,80 @@ function clear_console()
     clc
 end
 
-% The function get_values_matrix is used to extract the values matrix from the given equations
-% @Param equations is the equations vector
-% @Param variables is the variables vector
-% Return the matrix and equality vector from the parameters
-function [matrix, equality]= get_values_matrix(equations, variables)
-    [matrix, equality]= equationsToMatrix(equations, variables);
+
+function value= solve_system(Upper, b, size)
+    % Back substitution :
+    x = zeros(size, 1);
+    AM = [Upper b];
+    x(size) = AM(size, size+1) / AM(size, size);
+    for i = size - 1: - 1:1
+        x(i) = (AM(i, size+1) - AM(i, i + 1:size) * x(i + 1:size)) / AM(i, i);
+    end
+
+    value= x;
 end
 
 % The function process_matrix is used to generate the lower and upper triangular matrices from
-% the given matrix
+% the given matrix using the doolittle algorithm
 % @Param matrix is the given matrix to process
 % Return the lower and upper matrices
-function [lower, upper]= process_matrix(matrix)
-    [lower, upper]=lu(matrix);
+function [lower, upper]= process_matrix(matrix, size)
+    upper= zeros(size, size);
+    lower= zeros(size, size);
+
+    % Descomposing the matrix into upper and lower triangular matrices
+    for i= 1:size
+        % Finding Upper triangular
+        for k= i:size
+            % Summation of Lower[i][j] * Upper[j][k]
+            sum= 0;
+            for j= 1:i
+                sum= sum + (lower(i,j) * upper(j,k));
+            end
+            upper(i,k)= matrix(i,k) - sum;
+        end
+
+        % Finding Lower triangular
+        for k= i:size
+            if i==k
+                lower(i,i)= 1; % Diagonal as 1
+            else
+                % Summation of Lower[k][j] * Upper[j][i]
+                sum= 0;
+                for j= 1:i
+                    sum= sum + (lower(k,j) * upper(j,i));
+                end
+                lower(k,i)= (matrix(k,i) - sum) / upper(i,i);
+            end
+        end
+    end
+
 end
 
-% The function request_equations is used to get the linear equation system from the user
+% The function request_matrix is used to get the values matrix from the user
 % @Param size is the matrix size
-% Return a vector of strings representing the equations
-% Throw MATLAB:Triangular when vector length and size are different
-function value= request_equations(size)
-    value= split(input('Ingrese las ecuaciones separadas por comas: ', 's'), ',');
+% Return a matrix corresponding to the values matrix
+% Throw MATLAB:Triangular when matrix length and size are different
+function value= request_matrix(size)
+    value= input('Ingrese la matriz con los valores separados por espacios y las filas por punto y coma:\n');
+    value= reshape(value, size, size);
 
-    disp(value)
     if length(value)~=size
         throw(MException('MATLAB:Triangular',...
-                    'El número de ecuaciones excede el tamaño de la matriz cuadrada'))
+                        'El tamaño de la matriz ingresada no coincide con el tamaño ingresado'))
     end
 end
 
-% The function request_variables is used to get the variables from the user
+% The function request_values is used to get the values vector from the user
 % @Param size is the matrix size
-% Return a vector of characters representing the variables
+% Return a vector corresponding to the values vector that form the augmented matrix
 % Throw MATLAB:Triangular when vector length and size are different
-function value= request_variables(size)
-    value= split(input('Ingrese las variables separadas por comas: ', 's'), ',');
+function value= request_values(size)
+    value= input('Ingrese el vector de valores que forma la matriz aumentada:\n');
 
-    disp(value)
     if length(value)~=size
         throw(MException('MATLAB:Triangular',...
-                    'El número de variables excede el tamaño de la matriz cuadrada'))
+                        'El tamaño del vector ingresado no coincide con el tamaño ingresado'))
     end
 end
 
