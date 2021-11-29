@@ -87,12 +87,12 @@ function pretty_print_table(flag, polynom, points, func)
     if flag
         disp('   X_k    |   f(X_k)   |   P(X_k)   |   error')
         for i=low:(low+up)/12:up
-            disp(sprintf('%f  |  %f  |  %f  |  %f', i, round(func(i),4), round(polynom(i),4), round(func(i)-polynom(i),4)))
+            fprintf('%f  |  %f  |  %f  |  %f\n', i, round(func(i),4), round(polynom(i),4), abs(round(func(i)-polynom(i),4)))
         end
     else
         disp('   X_k    |   P(X_k)')
         for i=low:(low+up)/12:up
-            disp(sprintf('%f  |  %f', i, round(polynom(i),4)))
+            fprintf('%f  |  %f\n', i, round(polynom(i),4))
         end
     end
 end
