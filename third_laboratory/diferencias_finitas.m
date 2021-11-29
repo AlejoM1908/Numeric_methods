@@ -17,7 +17,7 @@ function diferencias_finitas(matriz, val_inter)
         end
         abscisas(1,i)= matriz(i,1);
         %Se calcula el x y se obtiene la posición en la que este se
-        %encuentra en la tabla
+        %encuentra en la tabla 
         if dif>abs(val_inter-matriz(i,1));
             dif= abs(val_inter-matriz(i,1));
             x=abscisas(1,i);
@@ -38,6 +38,7 @@ function diferencias_finitas(matriz, val_inter)
     s= (val_inter-x)/h;
     res_P= tabla(pos,3)+ s*tabla(pos+1,4);
     %Se grafica la función y se destaca el punto que se busca interpolar
+    fprintf('%s %s %f %s %f %s %f %s %f \n','El polinomio es: ', 'f(',val_inter,') = ',tabla(pos,3),'+', s,'*', tabla(pos+1,4));
     fprintf('%s %f \n','El resultado de la interpolación es: ', res_P);
     plot(abscisas, ordenadas,val_inter,res_P,'o');
     title 'Polinomio de Newton en diferencias finitas hacia adelante';
