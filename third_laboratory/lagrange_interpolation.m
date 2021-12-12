@@ -16,6 +16,7 @@ function lagrange_interpolation()
             % Apply lagrange interpolation
             P= lagrange(points);
             polynom= convert_polynom(P);
+            disp(polynom)
 
             % print all functions
             pretty_print_graph(flag, polynom, points, func)
