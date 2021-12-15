@@ -57,10 +57,10 @@ function parabola_matricial
     
     x=linspace(-4,5);
     vF=polyval(res_invert,x);
-    plot(x,vF,LineWidth=3),title(st),xlabel('x'),ylabel('y'),grid,
+    plot(x,vF,LineWidth=3),title(st),xlabel('x'),ylabel('y'),grid,legend("Parábola","Puntos")
     grid on
     hold on
-    plot(X,Y,'o')
+    plot(X,Y,'o'),
     
 
 end
