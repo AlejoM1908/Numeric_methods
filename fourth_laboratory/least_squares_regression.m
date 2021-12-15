@@ -40,7 +40,9 @@ function least_squares_regression()
     end
 end
 
-
+% The function pretty_print_console is used to print the summations table
+% @param values is the n+1x4 table of the sums for n points
+% @ func is the founded polynom
 function pretty_print_console(values, func)
     funcStr= extractBetween(func2str(func), '@(x)', '.*x.^0');
     n= length(values);
@@ -54,6 +56,9 @@ function pretty_print_console(values, func)
     fprintf('\nresult polynom: %s\n', cell2mat(funcStr(1)))
 end
 
+% The function pretty_print_graph is used to graph the founded polynom and the points
+% @param points is the nx2 matrix of points values
+% @param func is the founded polynom
 function pretty_print_graph(points, func)
     low= points(1,1);
     up= points(end,1);
@@ -102,6 +107,10 @@ function value= calculate_summations(points)
     end
 end
 
+% The function get_equations is used to calculate the required equations system to get the final polynom
+% @param summations is the n+1x4 matrix of the summations
+% @param n in the number of points
+% return the matrix and values abstraction of the equations system
 function [matrix,values]= get_equations(summations, n)
     matrix= zeros(2);
     values= zeros(2,1);
