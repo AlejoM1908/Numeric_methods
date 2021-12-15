@@ -3,7 +3,7 @@ function parabola_matricial
     clear
     clc
     
-    disp(' AJUSTE DE CURVAS POR MINIMOS CUADRADOS ');
+    disp(' PARÁBOLA ÓPTIMA POR MINIMOS CUADRADOS ');
     
     %X=[-3 0 2 4];
     %Y=[3 1 1 3];
