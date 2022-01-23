@@ -6,6 +6,7 @@ function newton_polynomial_interpolation_derivative()
             n= request_degree();
             selection= request_diff_type();
             point= request_point();
+            clear_console()
 
             % Generate the divided differences matrix
             t_array= generate_values(n, selection, point);
@@ -42,15 +43,30 @@ function value= request_function()
 end
 
 function value= request_degree()
-    value= 4;
+    value= str2double(input('Ingrese el grado del polinomio interpolador: ','s'));
+    if isnan(value)
+        throw(MException('MATLAB:interpolation',...
+                    'El valor ingresado no es númerico, intente nuevamente'))
+    end
 end
 
 function value= request_diff_type()
-    value= 2;
+    value= str2double(input('Ingrese la distribución de las diferencias divididas\n1.Diferencias progresivas\n2.Diferencias centradas\n3.Diferencias regresivas\n: ','s'));
+    if isnan(value)
+        throw(MException('MATLAB:interpolation',...
+                    'El valor ingresado no es númerico, intente nuevamente'))
+    elseif value < 1 | value > 3
+        throw(MException('MATLAB:interpolation',...
+                    'El valor ingresado no está entre las opciones, intente nuevamente'))
+    end
 end
 
 function value= request_point()
-    value= 0.8;
+    value= str2double(input('Ingrese el punto sobre el que desee evaluar la derivada: ','s'));
+    if isnan(value)
+        throw(MException('MATLAB:interpolation',...
+                    'El valor ingresado no es númerico, intente nuevamente'))
+    end
 end
 
 function value= divided_diff(func, n, t_array)
@@ -125,5 +141,5 @@ end
 
 % The function clear_console is usde to clear the console
 function clear_console()
-    
+    clc
 end
