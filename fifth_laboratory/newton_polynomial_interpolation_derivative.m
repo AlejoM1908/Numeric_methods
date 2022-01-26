@@ -55,7 +55,7 @@ function value= request_diff_type()
     if isnan(value)
         throw(MException('MATLAB:interpolation',...
                     'El valor ingresado no es númerico, intente nuevamente'))
-    elseif value < 1 | value > 3
+    elseif value < 1 || value > 3
         throw(MException('MATLAB:interpolation',...
                     'El valor ingresado no está entre las opciones, intente nuevamente'))
     end
