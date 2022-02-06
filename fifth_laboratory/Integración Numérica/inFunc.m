@@ -1,3 +1,3 @@
 function f = inFunc(x)
-  f = 2 + sin(2 * sqrt(x));
+  f = exp(-x^2/2);
 end
